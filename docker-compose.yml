@@ -1,0 +1,54 @@
+services:
+  mongodb:
+    image: mongo:8.0
+    container_name: corpxcloud-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: corpxcloud_cms
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: corpxcloud-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017
+      - MONGODB_DATABASE=corpxcloud_cms
+      - JWT_SECRET_KEY=change-this-secret-in-production-use-strong-entropy-key
+      - JWT_ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=60
+      - FRONTEND_URL=http://localhost:3000
+      - MEDIA_ROOT=uploads
+      - COOKIE_SECURE=false
+    depends_on:
+      - mongodb
+    volumes:
+      - backend_uploads:/app/uploads
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+        - NEXT_PUBLIC_BACKEND_API_URL=http://localhost:8000
+    container_name: corpxcloud-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+      - NEXT_PUBLIC_BACKEND_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
+  backend_uploads:

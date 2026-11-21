@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy: #021b3b;
+  --royal: #0055d4;
+  --sky: #0099ff;
+  --aqua: #00c8ff;
+  --canvas: #fafcff;
+  --hairline: #e3ecf7;
+  --cell: 34px; /* pixel/grid motif unit — derived from the logomark blocks */
+}
+
+@layer base {
+  * {
+    @apply border-hairline;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-canvas text-ink antialiased;
+    font-feature-settings: "ss01" on, "cv05" on;
+  }
+
+  ::selection {
+    background: rgba(0, 153, 255, 0.18);
+    color: var(--navy);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--sky);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display text-navy;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  /* ---- Signature motif: the pixel lattice from the logomark ---- */
+  .lattice {
+    background-image: linear-gradient(to right, rgba(2, 27, 59, 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(2, 27, 59, 0.055) 1px, transparent 1px);
+    background-size: var(--cell) var(--cell);
+  }
+
+  .lattice-dark {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: var(--cell) var(--cell);
+  }
+
+  /* Fades the lattice out so it reads as atmosphere, never as a table */
+  .lattice-fade {
+    -webkit-mask-image: radial-gradient(120% 80% at 50% 0%, #000 20%, transparent 78%);
+    mask-image: radial-gradient(120% 80% at 50% 0%, #000 20%, transparent 78%);
+  }
+
+  .glass {
+    @apply border border-white/60 bg-white/70 backdrop-blur-md;
+  }
+
+  .glass-dark {
+    @apply border border-white/10 bg-white/[0.04] backdrop-blur-md;
+  }
+
+  .eyebrow {
+    @apply font-mono text-eyebrow font-medium uppercase;
+  }
+
+  .gradient-text {
+    background: linear-gradient(104deg, #0055d4 0%, #0099ff 52%, #00c8ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Gradient border without a wrapper element */
+  .gradient-ring {
+    position: relative;
+  }
+  .gradient-ring::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(120deg, #0055d4, #00c8ff 50%, rgba(0, 153, 255, 0.15));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Ambient light used behind the hero and CTA banner */
+  .ambient {
+    background: radial-gradient(
+      42% 46% at 50% 32%,
+      rgba(0, 153, 255, 0.22) 0%,
+      rgba(0, 200, 255, 0.1) 42%,
+      transparent 72%
+    );
+  }
+}
+
+@layer utilities {
+  .font-wide {
+    font-stretch: 112%;
+  }
+  .text-shadow-glow {
+    text-shadow: 0 0 32px rgba(0, 200, 255, 0.35);
+  }
+}
+
+/* Respect the OS-level motion preference everywhere, including Framer Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
