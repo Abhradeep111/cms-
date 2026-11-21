@@ -19,6 +19,10 @@ const schema = z.object({
   content_json: z.object({
     mission: z.string().optional(),
     vision: z.string().optional(),
+    stats: z.array(z.object({
+      value: z.string(),
+      label: z.string(),
+    })).optional(),
   }).optional(),
   is_visible: z.boolean().optional(),
 });
@@ -53,7 +57,16 @@ export default function AboutSectionPage() {
       subheading: '',
       description: '',
       image_url: '',
-      content_json: { mission: '', vision: '' },
+      content_json: {
+        mission: '',
+        vision: '',
+        stats: [
+          { value: '100%', label: 'Tenant Isolation' },
+          { value: '8+', label: 'Modular Solutions' },
+          { value: '99.9%', label: 'Targeted Uptime' },
+          { value: '0', label: 'Data Redundancy' },
+        ],
+      },
       is_visible: true,
     },
   });
@@ -66,12 +79,25 @@ export default function AboutSectionPage() {
     try {
       const data = await getAdminHomepageSection('about');
       const cj = (data.content_json as any) ?? {};
+      const statsList = (Array.isArray(cj.stats) && cj.stats.length === 4)
+        ? cj.stats
+        : [
+            { value: '100%', label: 'Tenant Isolation' },
+            { value: '8+', label: 'Modular Solutions' },
+            { value: '99.9%', label: 'Targeted Uptime' },
+            { value: '0', label: 'Data Redundancy' },
+          ];
+
       reset({
         heading: data.heading ?? '',
         subheading: data.subheading ?? '',
         description: data.description ?? '',
         image_url: data.image_url ?? '',
-        content_json: { mission: cj.mission ?? '', vision: cj.vision ?? '' },
+        content_json: {
+          mission: cj.mission ?? '',
+          vision: cj.vision ?? '',
+          stats: statsList,
+        },
         is_visible: data.is_visible ?? true,
       });
     } catch {
@@ -154,6 +180,35 @@ export default function AboutSectionPage() {
           </h2>
           <FormTextarea label="Mission Statement" rows={4} {...register('content_json.mission')} />
           <FormTextarea label="Vision Statement" rows={4} {...register('content_json.vision')} />
+        </div>
+
+        {/* Quick Highlights / Statistics */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-5">
+          <div className="border-b border-slate-100 pb-3">
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wider">
+              Quick Statistics
+            </h2>
+            <p className="text-xs text-slate-400 mt-0.5">
+              4 key platform metrics displayed on the About page (e.g. 100% Tenant Isolation, 8+ Modular Solutions)
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[0, 1, 2, 3].map((idx) => (
+              <div key={idx} className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-3">
+                <span className="text-xs font-semibold text-sky-600 uppercase tracking-wider">Metric #{idx + 1}</span>
+                <FormInput
+                  label="Value"
+                  placeholder="e.g. 100%, 8+, 99.9%, 0"
+                  {...register(`content_json.stats.${idx}.value` as any)}
+                />
+                <FormInput
+                  label="Label"
+                  placeholder="e.g. Tenant Isolation"
+                  {...register(`content_json.stats.${idx}.label` as any)}
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Submit */}

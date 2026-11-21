@@ -455,6 +455,12 @@ async def get_about_compat():
     mission = content_json.get("mission") or ""
     vision = content_json.get("vision") or ""
     story = content_json.get("company_story") or content_json.get("story") or content_json.get("additional_content") or ""
+    stats = content_json.get("stats") or [
+        {"value": "100%", "label": "Tenant Isolation"},
+        {"value": "8+", "label": "Modular Solutions"},
+        {"value": "99.9%", "label": "Targeted Uptime"},
+        {"value": "0", "label": "Data Redundancy"},
+    ]
 
     about_data = {
         "id": str(about_sec.id) if about_sec else "about-page",
@@ -466,6 +472,7 @@ async def get_about_compat():
         "company_story": story,
         "mission": mission,
         "vision": vision,
+        "stats": stats,
         "company": site_name,
         "sections": [],
     }
