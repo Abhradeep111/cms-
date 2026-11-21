@@ -2,6 +2,7 @@ import logging
 
 from app.core.config import settings
 from app.modules.auth.services import AuthService
+from app.modules.careers.services import CareerService
 from app.modules.faqs.models import FAQ
 from app.modules.homepage.models import HomepageSection
 from app.modules.navigation.models import NavigationItem
@@ -615,5 +616,8 @@ async def seed_initial_data():
         ]
         for s in seo_defaults:
             await SEOMetadata(**s).insert()
+
+    # 10. Initial Job Openings
+    await CareerService.seed_initial_jobs()
 
     logger.info("Initial database seeding completed successfully.")

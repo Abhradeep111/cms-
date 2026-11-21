@@ -189,3 +189,37 @@ export interface SEOMetadata {
   created_at: string;
   updated_at: string;
 }
+
+export interface JobOpening {
+  id: string;
+  title: string;
+  department: string;
+  location: string;
+  type: string;
+  experience: string;
+  summary: string;
+  responsibilities: string[];
+  requirements: string[];
+  display_order: number;
+  status: 'published' | 'draft' | 'closed';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface JobApplication {
+  id: string;
+  job_id?: string;
+  job_title: string;
+  name: string;
+  email: string;
+  phone: string;
+  experience_range: string;
+  experience_years: number;
+  portfolio_url?: string;
+  resume_url?: string;
+  cover_note?: string;
+  status: 'pending' | 'reviewed' | 'shortlisted' | 'rejected';
+  created_at: string;
+  updated_at: string;
+}
+

@@ -12,6 +12,7 @@ from app.modules.faqs.models import FAQ
 from app.modules.homepage.models import HomepageSection
 from app.modules.media.models import MediaAsset
 from app.modules.navigation.models import NavigationItem
+from app.modules.careers.models import JobApplication, JobOpening
 from app.modules.products.models import Product
 from app.modules.revisions.models import ContentRevision
 from app.modules.seo.models import SEOMetadata
@@ -33,6 +34,8 @@ DOCUMENT_MODELS = [
     SiteSetting,
     SEOMetadata,
     ContentRevision,
+    JobOpening,
+    JobApplication,
 ]
 
 

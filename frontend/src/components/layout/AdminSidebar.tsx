@@ -10,6 +10,7 @@ import {
   Info,
   Package,
   Layers,
+  Briefcase,
   Star,
   BarChart2,
   MessageSquare,
@@ -69,6 +70,7 @@ const navEntries: NavEntry[] = [
   },
   { label: 'Products', href: '/products', icon: <Package className="w-5 h-5" /> },
   { label: 'Services', href: '/services', icon: <Layers className="w-5 h-5" /> },
+  { label: 'Careers', href: '/careers', icon: <Briefcase className="w-5 h-5" /> },
   { label: 'Testimonials', href: '/testimonials', icon: <MessageSquare className="w-5 h-5" /> },
   { label: 'FAQs', href: '/faqs', icon: <HelpCircle className="w-5 h-5" /> },
   { label: 'Media Library', href: '/media', icon: <Image className="w-5 h-5" /> },
@@ -100,9 +102,8 @@ export default function AdminSidebar() {
 
   return (
     <aside
-      className={`relative flex flex-col bg-slate-900 text-slate-100 transition-all duration-300 ease-in-out shrink-0 ${
-        isCollapsed ? 'w-16' : 'w-64'
-      }`}
+      className={`relative flex flex-col bg-slate-900 text-slate-100 transition-all duration-300 ease-in-out shrink-0 ${isCollapsed ? 'w-16' : 'w-64'
+        }`}
     >
       {/* Logo */}
       <div className="flex items-center h-16 px-3 border-b border-slate-700 overflow-hidden">
@@ -146,11 +147,10 @@ export default function AdminSidebar() {
                 <button
                   onClick={() => !isCollapsed && toggleGroup(entry.label)}
                   title={isCollapsed ? entry.label : undefined}
-                  className={`w-full flex items-center gap-3 px-2 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    anyChildActive
-                      ? 'text-sky-400 bg-slate-800'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                  }`}
+                  className={`w-full flex items-center gap-3 px-2 py-2 rounded-lg text-sm font-medium transition-colors ${anyChildActive
+                    ? 'text-sky-400 bg-slate-800'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                    }`}
                 >
                   <span className="flex-shrink-0">{entry.icon}</span>
                   {!isCollapsed && (
@@ -171,11 +171,10 @@ export default function AdminSidebar() {
                       <Link
                         key={child.href}
                         href={child.href}
-                        className={`flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                          isActive(child.href)
-                            ? 'text-sky-400 bg-slate-800'
-                            : 'text-slate-400 hover:text-white hover:bg-slate-800'
-                        }`}
+                        className={`flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-xs font-medium transition-colors ${isActive(child.href)
+                          ? 'text-sky-400 bg-slate-800'
+                          : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                          }`}
                       >
                         {child.icon}
                         {child.label}
@@ -193,11 +192,10 @@ export default function AdminSidebar() {
               key={entry.href}
               href={entry.href}
               title={isCollapsed ? entry.label : undefined}
-              className={`flex items-center gap-3 px-2 py-2 rounded-lg text-sm font-medium transition-colors ${
-                isActive(entry.href)
-                  ? 'text-sky-400 bg-slate-800'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800'
-              }`}
+              className={`flex items-center gap-3 px-2 py-2 rounded-lg text-sm font-medium transition-colors ${isActive(entry.href)
+                ? 'text-sky-400 bg-slate-800'
+                : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                }`}
             >
               <span className="flex-shrink-0">{entry.icon}</span>
               {!isCollapsed && <span>{entry.label}</span>}

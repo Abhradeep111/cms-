@@ -2,6 +2,14 @@ from fastapi import APIRouter
 
 from app.modules.auth.routes import router as auth_router
 from app.modules.dashboard.routes import router as dashboard_router
+from app.modules.careers.routes import (
+    admin_router as careers_admin_router,
+)
+from app.modules.careers.routes import (
+    public_router as careers_public_router,
+)
+from app.modules.careers.schemas import JobApplicationCreate
+from app.modules.careers.services import CareerService
 from app.modules.faqs.routes import admin_router as faqs_admin_router
 from app.modules.faqs.routes import public_router as faqs_public_router
 from app.modules.homepage.routes import (
@@ -59,6 +67,7 @@ api_router.include_router(dashboard_router)
 api_router.include_router(homepage_admin_router)
 api_router.include_router(products_admin_router)
 api_router.include_router(services_admin_router)
+api_router.include_router(careers_admin_router)
 api_router.include_router(testimonials_admin_router)
 api_router.include_router(faqs_admin_router)
 api_router.include_router(media_admin_router)
@@ -70,6 +79,7 @@ api_router.include_router(settings_admin_router)
 api_router.include_router(homepage_public_router)
 api_router.include_router(products_public_router)
 api_router.include_router(services_public_router)
+api_router.include_router(careers_public_router)
 api_router.include_router(testimonials_public_router)
 api_router.include_router(faqs_public_router)
 api_router.include_router(navigation_public_router)
@@ -526,13 +536,31 @@ async def create_contact_inquiry_compat(data: dict):
     return {"status": "success", "data": res, **res}
 
 
+@platform_compat_router.get("/careers/jobs")
+async def get_careers_jobs_compat():
+    jobs = await CareerService.list_public_jobs()
+    items = [CareerService.to_job_response(j).model_dump() for j in jobs]
+    return {"status": "success", "data": items, "items": items}
+
+
 @platform_compat_router.post("/job-applications")
 @platform_compat_router.post("/careers/apply")
 async def create_job_application_compat(data: dict):
-    res = {
-        "id": "job_app_compat",
-        "success": True,
-        "message": "Application submitted successfully",
-        **data,
-    }
-    return {"status": "success", "data": res, **res}
+    try:
+        app_data = JobApplicationCreate(
+            job_id=str(data.get("job_id") or ""),
+            job_title=str(data.get("job_title") or "General Application"),
+            name=str(data.get("name") or data.get("fullName") or "Anonymous"),
+            email=str(data.get("email") or ""),
+            phone=str(data.get("phone") or ""),
+            experience_range=str(data.get("experience_range") or data.get("experience") or ""),
+            experience_years=float(data["experience_years"]) if data.get("experience_years") is not None else None,
+            portfolio_url=str(data.get("portfolio_url") or data.get("portfolioUrl") or "") or None,
+            resume_url=str(data.get("resume_url") or data.get("resumeUrl") or "") or None,
+            cover_note=str(data.get("cover_note") or data.get("coverNote") or data.get("message") or "") or None,
+        )
+        saved_app = await CareerService.create_application(app_data)
+        res = CareerService.to_app_response(saved_app).model_dump()
+        return {"status": "success", "success": True, "message": "Application submitted successfully", "data": res}
+    except Exception as e:
+        return {"status": "error", "success": False, "message": str(e)}
