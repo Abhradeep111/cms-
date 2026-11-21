@@ -446,9 +446,26 @@ async def get_homepage_branding():
 async def get_about_compat():
     general = await SettingsService.get_setting("general")
     site_name = general.data.get("site_name", "Corpxcloud")
+    about_sec = await HomepageService.get_section("about")
+    content_json = about_sec.content_json if (about_sec and about_sec.content_json) else {}
+
+    title = about_sec.heading if (about_sec and about_sec.heading) else f"About {site_name}"
+    subtitle = about_sec.subheading if (about_sec and about_sec.subheading) else ""
+    description = about_sec.description if (about_sec and about_sec.description) else ""
+    mission = content_json.get("mission") or ""
+    vision = content_json.get("vision") or ""
+    story = content_json.get("company_story") or content_json.get("story") or content_json.get("additional_content") or ""
+
     about_data = {
-        "title": f"About {site_name}",
-        "description": "Unified Multi-Tenant Cloud Operating System for Modern Enterprises.",
+        "id": str(about_sec.id) if about_sec else "about-page",
+        "title": title,
+        "heading": title,
+        "subtitle": subtitle,
+        "subheading": subtitle,
+        "description": description,
+        "company_story": story,
+        "mission": mission,
+        "vision": vision,
         "company": site_name,
         "sections": [],
     }
