@@ -2,6 +2,15 @@
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
+  async redirects() {
+    return [
+      {
+        source: '/dashboard',
+        destination: '/products',
+        permanent: false,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

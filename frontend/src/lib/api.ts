@@ -37,8 +37,7 @@ api.interceptors.response.use(
   (response) => response.data,
   (error: AxiosError) => {
     if (error.response?.status === 401 && typeof window !== 'undefined') {
-      // If unauthorized and currently in dashboard, redirect to login
-      if (window.location.pathname.startsWith('/dashboard') || window.location.pathname.startsWith('/homepage')) {
+      if (window.location.pathname !== '/login') {
         window.location.href = '/login';
       }
     }

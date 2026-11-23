@@ -9,24 +9,6 @@ export interface User {
   updated_at: string;
 }
 
-export interface DashboardStats {
-  total_products: number;
-  published_products: number;
-  draft_products: number;
-  total_services: number;
-  total_testimonials: number;
-  total_faqs: number;
-  media_assets_count: number;
-  recent_updates: Array<{
-    id: string;
-    entity_type: string;
-    entity_id: string;
-    action: string;
-    changed_by?: string;
-    created_at: string;
-  }>;
-}
-
 export interface HomepageSection {
   id: string;
   section_key: string;

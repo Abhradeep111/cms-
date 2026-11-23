@@ -32,7 +32,7 @@ export default function LoginPage() {
     setLoginError(null);
     try {
       await login({ email: data.email, password: data.password });
-      router.push('/dashboard');
+      router.push('/products');
     } catch (err: unknown) {
       if (err instanceof Error) {
         setLoginError(err.message || 'Invalid email or password. Please try again.');

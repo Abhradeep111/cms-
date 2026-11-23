@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  LayoutDashboard,
   Home,
   Sparkles,
   Info,
@@ -16,7 +15,7 @@ import {
   MessageSquare,
   HelpCircle,
   PhoneCall,
-  Image,
+  Image as ImageIcon,
   Navigation,
   Mail,
   Search,
@@ -49,11 +48,6 @@ function isNavGroup(entry: NavEntry): entry is NavGroup {
 
 const navEntries: NavEntry[] = [
   {
-    label: 'Dashboard',
-    href: '/dashboard',
-    icon: <LayoutDashboard className="w-5 h-5" />,
-  },
-  {
     label: 'Homepage',
     icon: <Home className="w-5 h-5" />,
     children: [
@@ -73,7 +67,7 @@ const navEntries: NavEntry[] = [
   { label: 'Careers', href: '/careers', icon: <Briefcase className="w-5 h-5" /> },
   { label: 'Testimonials', href: '/testimonials', icon: <MessageSquare className="w-5 h-5" /> },
   { label: 'FAQs', href: '/faqs', icon: <HelpCircle className="w-5 h-5" /> },
-  { label: 'Media Library', href: '/media', icon: <Image className="w-5 h-5" /> },
+  { label: 'Media Library', href: '/media', icon: <ImageIcon className="w-5 h-5" /> },
   { label: 'Navigation', href: '/navigation', icon: <Navigation className="w-5 h-5" /> },
   { label: 'Contact & Footer', href: '/contact-footer', icon: <Mail className="w-5 h-5" /> },
   { label: 'SEO Management', href: '/seo', icon: <Search className="w-5 h-5" /> },

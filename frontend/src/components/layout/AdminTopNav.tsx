@@ -63,7 +63,7 @@ export default function AdminTopNav() {
       {/* Breadcrumb */}
       <nav className="flex items-center gap-1 text-sm text-slate-500" aria-label="Breadcrumb">
         {breadcrumbs.length === 0 ? (
-          <span className="font-medium text-slate-700">Dashboard</span>
+          <span className="font-medium text-slate-700">Products</span>
         ) : (
           breadcrumbs.map((crumb, i) => (
             <React.Fragment key={i}>
