@@ -182,7 +182,7 @@ async def seed_initial_data():
                 "primary_cta_label": "Request enterprise demo",
                 "primary_cta_url": "#demo",
                 "secondary_cta_label": "Talk to sales about pricing",
-                "secondary_cta_url": "mailto:sales@corpxcloud.com",
+                "secondary_cta_url": "mailto:contact@corpxcloud.com",
                 "display_order": 9,
                 "is_visible": True,
             },
@@ -562,7 +562,7 @@ async def seed_initial_data():
                 "contact",
                 {
                     "general_email": "contact@corpxcloud.com",
-                    "sales_email": "sales@corpxcloud.com",
+                    "sales_email": "contact@corpxcloud.com",
                     "phone": "+1 (800) 555-0199",
                     "city": "San Francisco",
                     "region": "California",

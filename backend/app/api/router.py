@@ -109,6 +109,7 @@ async def get_homepage_cmss():
     seo = await SEOService.get_or_create_page_seo("homepage")
     footer_setting = await SettingsService.get_setting("footer")
     general_setting = await SettingsService.get_setting("general")
+    contact_setting = await SettingsService.get_setting("contact")
 
     # Format into structure expected by frontend getHomepageCMS
     stats_section = sections.get("statistics", {})
@@ -330,10 +331,29 @@ async def get_homepage_cmss():
         },
     ]
 
+    contact_data = contact_setting.data or {}
+    footer_data = footer_setting.data or {}
+    general_data = general_setting.data or {}
+
+    footer_settings = {
+        **contact_data,
+        **footer_data,
+        "email": contact_data.get("general_email") or footer_data.get("email") or "contact@corpxcloud.com",
+        "salesEmail": contact_data.get("sales_email") or footer_data.get("sales_email") or "contact@corpxcloud.com",
+        "phone": contact_data.get("phone") or footer_data.get("phone") or "+91 98300 12345",
+        "city": contact_data.get("city") or footer_data.get("city") or "Kolkata",
+        "region": contact_data.get("region") or footer_data.get("region") or "West Bengal",
+        "country": contact_data.get("country") or footer_data.get("country") or "India",
+        "legalName": footer_data.get("legal_name") or general_data.get("site_name") or "CORPXCLOUD Technologies Private Limited",
+        "facebook": contact_data.get("facebook_url") or footer_data.get("facebook") or "",
+        "instagram": contact_data.get("instagram_url") or footer_data.get("instagram") or "",
+        "linkedin": contact_data.get("linkedin_url") or footer_data.get("linkedin") or "",
+    }
+
     footer = {
-        "columns": footer_setting.data.get("columns", []),
-        "legalLinks": footer_setting.data.get("legal_links", []),
-        "settings": footer_setting.data,
+        "columns": footer_data.get("columns", []),
+        "legalLinks": footer_data.get("legal_links", []),
+        "settings": footer_settings,
     }
 
     branding = {
@@ -365,6 +385,11 @@ async def get_homepage_cmss():
         "roadmapPhases": roadmap_phases,
         "footer": footer,
         "branding": branding,
+        "contact": {
+            **contact_data,
+            "legal_name": footer_data.get("legal_name") or general_data.get("site_name") or "CORPXCLOUD Technologies Private Limited",
+            "legalName": footer_data.get("legal_name") or general_data.get("site_name") or "CORPXCLOUD Technologies Private Limited",
+        },
     }
 
     return {
@@ -449,6 +474,24 @@ async def get_homepage_branding():
     data = await get_homepage_cmss()
     branding = data["branding"]
     return {"status": "success", "data": branding, "branding": branding}
+
+
+@platform_compat_router.get("/contact")
+@platform_compat_router.get("/contact-settings")
+@platform_compat_router.get("/homepage-contact")
+async def get_platform_contact():
+    contact_setting = await SettingsService.get_setting("contact")
+    footer_setting = await SettingsService.get_setting("footer")
+    general_setting = await SettingsService.get_setting("general")
+    contact_data = contact_setting.data or {}
+    footer_data = footer_setting.data or {}
+    general_data = general_setting.data or {}
+    data = {
+        **contact_data,
+        "legal_name": footer_data.get("legal_name") or general_data.get("site_name") or "CORPXCLOUD Technologies Private Limited",
+        "legalName": footer_data.get("legal_name") or general_data.get("site_name") or "CORPXCLOUD Technologies Private Limited",
+    }
+    return {"status": "success", "data": data, **data}
 
 
 @platform_compat_router.get("/about-us")

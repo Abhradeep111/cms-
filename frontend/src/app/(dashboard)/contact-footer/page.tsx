@@ -155,11 +155,10 @@ export default function ContactFooterPage() {
         <button
           type="button"
           onClick={() => setActiveTab('contact')}
-          className={`pb-3 flex items-center gap-2 border-b-2 transition-colors ${
-            activeTab === 'contact'
+          className={`pb-3 flex items-center gap-2 border-b-2 transition-colors ${activeTab === 'contact'
               ? 'border-navy text-navy font-bold'
               : 'border-transparent text-slate-400 hover:text-slate-700'
-          }`}
+            }`}
         >
           <Mail className="w-4 h-4" />
           Contact Info
@@ -167,11 +166,10 @@ export default function ContactFooterPage() {
         <button
           type="button"
           onClick={() => setActiveTab('social')}
-          className={`pb-3 flex items-center gap-2 border-b-2 transition-colors ${
-            activeTab === 'social'
+          className={`pb-3 flex items-center gap-2 border-b-2 transition-colors ${activeTab === 'social'
               ? 'border-navy text-navy font-bold'
               : 'border-transparent text-slate-400 hover:text-slate-700'
-          }`}
+            }`}
         >
           <Share2 className="w-4 h-4" />
           Social Networks
@@ -179,11 +177,10 @@ export default function ContactFooterPage() {
         <button
           type="button"
           onClick={() => setActiveTab('footer')}
-          className={`pb-3 flex items-center gap-2 border-b-2 transition-colors ${
-            activeTab === 'footer'
+          className={`pb-3 flex items-center gap-2 border-b-2 transition-colors ${activeTab === 'footer'
               ? 'border-navy text-navy font-bold'
               : 'border-transparent text-slate-400 hover:text-slate-700'
-          }`}
+            }`}
         >
           <Layers className="w-4 h-4" />
           Footer Settings
@@ -204,7 +201,7 @@ export default function ContactFooterPage() {
               />
               <FormInput
                 label="Sales & Enterprise Inquiries Email"
-                placeholder="sales@corpxcloud.com"
+                placeholder="contact@corpxcloud.com"
                 {...contactForm.register('sales_email')}
               />
             </div>

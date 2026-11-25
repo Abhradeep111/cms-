@@ -12,10 +12,10 @@ export const site = {
   description:
     'A multi-tenant enterprise cloud platform. HRMS, Hospital Management and Vendor & Inventory are live today; ERP, IGA, CRM, Restaurant and Institute management ship through 2026.',
   email: {
-    general: 'hello@corpxcloud.com',
-    sales: process.env.NEXT_PUBLIC_SALES_EMAIL ?? 'sales@corpxcloud.com',
+    general: 'contact@corpxcloud.com',
+    sales: process.env.NEXT_PUBLIC_SALES_EMAIL ?? '',
   },
-  phone: process.env.NEXT_PUBLIC_PHONE ?? '+91 98300 12345',
+  phone: process.env.NEXT_PUBLIC_PHONE ?? '+91 9635493346',
   address: {
     city: 'Kolkata',
     region: 'West Bengal',

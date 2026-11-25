@@ -301,30 +301,91 @@ class CareerService:
         page: int = 1,
         page_size: int = 50,
     ) -> Tuple[List[JobApplication], int, int]:
-        query = {}
+        clauses = []
 
         if job_id and job_id != "all":
-            query["$or"] = [{"job_id": job_id}, {"job_title": job_id}]
+            clauses.append({"$or": [{"job_id": job_id}, {"job_title": job_id}]})
         elif job_title:
-            query["job_title"] = job_title
+            clauses.append({"job_title": job_title})
 
         if status and status != "all":
-            query["status"] = status
+            clauses.append({"status": status})
 
         # Experience filters
         if experience_group and experience_group != "all":
-            if experience_group == "fresher" or experience_group == "0":
-                query["experience_years"] = {"$lte": 0.5}
-            elif experience_group == "1-2":
-                query["experience_years"] = {"$gte": 1.0, "$lte": 2.5}
-            elif experience_group == "2-3":
-                query["experience_years"] = {"$gte": 2.0, "$lte": 3.5}
-            elif experience_group == "3-5":
-                query["experience_years"] = {"$gte": 3.0, "$lte": 5.5}
-            elif experience_group == "5-10":
-                query["experience_years"] = {"$gte": 5.0, "$lte": 10.5}
-            elif experience_group == "10+":
-                query["experience_years"] = {"$gte": 10.0}
+            eg = experience_group.strip().lower()
+            if eg in ("0", "fresher"):
+                clauses.append({
+                    "$or": [
+                        {"experience_range": {"$in": ["0", "fresher", "Fresher (0 years)"]}},
+                        {"experience_years": {"$lt": 1.0}},
+                    ]
+                })
+            elif eg == "1-2":
+                clauses.append({
+                    "$or": [
+                        {"experience_range": {"$in": ["1-2", "1–2", "1-2 years", "1–2 years"]}},
+                        {"experience_years": {"$gte": 1.0, "$lt": 2.0}},
+                    ]
+                })
+            elif eg == "2-3":
+                clauses.append({
+                    "$or": [
+                        {"experience_range": {"$in": ["2-3", "2–3", "2-3 years", "2–3 years"]}},
+                        {"experience_years": {"$gte": 2.0, "$lt": 3.0}},
+                    ]
+                })
+            elif eg == "3-4":
+                clauses.append({
+                    "$or": [
+                        {"experience_range": {"$in": ["3-4", "3–4", "3-4 years", "3–4 years"]}},
+                        {"experience_years": {"$gte": 3.0, "$lt": 4.0}},
+                    ]
+                })
+            elif eg == "4-5":
+                clauses.append({
+                    "$or": [
+                        {"experience_range": {"$in": ["4-5", "4–5", "4-5 years", "4–5 years"]}},
+                        {"experience_years": {"$gte": 4.0, "$lt": 5.0}},
+                    ]
+                })
+            elif eg == "3-5":
+                clauses.append({
+                    "$or": [
+                        {"experience_range": {"$in": ["3-5", "3–5", "3-4", "4-5"]}},
+                        {"experience_years": {"$gte": 3.0, "$lt": 5.0}},
+                    ]
+                })
+            elif eg == "5-10":
+                clauses.append({
+                    "$or": [
+                        {"experience_range": {"$in": ["5-10", "5–10", "5-10 years", "5–10 years"]}},
+                        {"experience_years": {"$gte": 5.0, "$lt": 10.0}},
+                    ]
+                })
+            elif eg == "10-15":
+                clauses.append({
+                    "$or": [
+                        {"experience_range": {"$in": ["10-15", "10–15", "10-15 years", "10–15 years"]}},
+                        {"experience_years": {"$gte": 10.0, "$lt": 15.0}},
+                    ]
+                })
+            elif eg == "15+":
+                clauses.append({
+                    "$or": [
+                        {"experience_range": {"$in": ["15+", "15", "15+ years"]}},
+                        {"experience_years": {"$gte": 15.0}},
+                    ]
+                })
+            elif eg == "10+":
+                clauses.append({
+                    "$or": [
+                        {"experience_range": {"$in": ["10+", "10-15", "15+", "10–15", "10+ years"]}},
+                        {"experience_years": {"$gte": 10.0}},
+                    ]
+                })
+            else:
+                clauses.append({"experience_range": experience_group})
         else:
             exp_conditions = {}
             if min_experience is not None:
@@ -332,15 +393,19 @@ class CareerService:
             if max_experience is not None:
                 exp_conditions["$lte"] = max_experience
             if exp_conditions:
-                query["experience_years"] = exp_conditions
+                clauses.append({"experience_years": exp_conditions})
 
         if search:
-            query["$or"] = [
-                {"name": {"$regex": search, "$options": "i"}},
-                {"email": {"$regex": search, "$options": "i"}},
-                {"phone": {"$regex": search, "$options": "i"}},
-                {"job_title": {"$regex": search, "$options": "i"}},
-            ]
+            clauses.append({
+                "$or": [
+                    {"name": {"$regex": search, "$options": "i"}},
+                    {"email": {"$regex": search, "$options": "i"}},
+                    {"phone": {"$regex": search, "$options": "i"}},
+                    {"job_title": {"$regex": search, "$options": "i"}},
+                ]
+            })
+
+        query = {"$and": clauses} if clauses else {}
 
         total = await JobApplication.find(query).count()
         skip = (page - 1) * page_size

@@ -5,8 +5,8 @@ from pydantic import BaseModel
 
 
 class ContactSettings(BaseModel):
-    general_email: str = "hello@corpxcloud.com"
-    sales_email: str = "sales@corpxcloud.com"
+    general_email: str = "contact@corpxcloud.com"
+    sales_email: str = "contact@corpxcloud.com"
     phone: str = "+91 98300 12345"
     city: str = "Kolkata"
     region: str = "West Bengal"
